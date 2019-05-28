@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="static/style.css" rel="stylesheet" type="text/css" />
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/6.0.2/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/6.0.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/6.0.2/firebase-database.js"></script>
+    <script defer src="/__/firebase/6.0.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/6.0.2/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="mui.min.js"></script>
+    <script src="mui-combined.js"></script>
+    <script src="jscolor.js"></script>
+    <script src="textbox.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="gen_wordcloud.js"></script>
+    <script src="d3.layout.cloud.js"></script>
+
+    <style>
+    
+ .extern-filter-slider::-webkit-slider-thumb {
+    border-radius: 100%;
+    height: 15px;
+    width: 15px;
+    -webkit-appearance: none;
+    background-color:#2196F3;
+}
+
+.extern-filter-slider {
+    -webkit-appearance: none;
+    height: 5px;
+    width: 160px;
+    background-color:lightgrey 
+}
+
+    </style>
+  </head>
+  <body>
+
+    <div id="sidebar">
+      <div class="mui--text-white mui--text-display1 mui--align-vertical">Word Cloud </div>
+      <div class="mui-dropdown">
+        <button style='margin-top:30px;width:154.45px;' class="mui-btn mui-btn--primary" data-mui-toggle="dropdown" onclick="controlshow()">
+         <b> Background</b>
+          <span class="mui-caret"></span>
+        </button>
+        <ul id='selector' style='display: none'>
+          <input id="color" class="jscolor" value="000000" onchange="changecolor()">
+        </ul>
+      </div>
+
+      <div class="mui-dropdown">
+        <button id='fontbutton' style='width:154.45px;' class="mui-btn mui-btn--primary" data-mui-toggle="dropdown">
+         <b> Font</b>
+          <span class="mui-caret"></span>
+        </button>
+        <ul class="mui-dropdown__menu">
+          <li onclick="changefont('Impact')"><a href="#"><font face='Impact'>Impact</font></a></li>
+          <li onclick="changefont('Arial')"><a href="#"><font face='Arial'>Arial</font></a></li>
+          <li onclick="changefont('Helvetica')"><a href="#"><font face='Helvetica'>Helvetica</font></a></li>
+          <li onclick="changefont('Georgia')"><a href="#"><font face='Georgia'>Georgia</font></a></li>
+          <li onclick="changefont('Serif')"><a href="#"><font face='Serif'>Serif</font></a></li>
+        </ul>
+      </div>
+
+      <div class="mui-dropdown">
+        <button id='fontsizebutton' style='width:154.45px;'class="mui-btn mui-btn--primary" data-mui-toggle="dropdown">
+          <b>FontSize</b>
+          <span class="mui-caret"></span>
+        </button>
+        <ul class="mui-dropdown__menu">
+          <li onclick="changefontsize('small',50)" ><a href="#">small</a></li>
+          <li onclick="changefontsize('medium',90)" ><a href="#">medium</a></li>
+          <li onclick="changefontsize('large',120)" ><a href="#">large</a></li>
+          <li onclick="changefontsize('huge',150)" ><a href="#">huge</a></li>
+        </ul>
+      </div>
+
+      <div class="mui-dropdown">
+        <button id='spiralbutton' style='width:154.45px;'class="mui-btn mui-btn--primary" data-mui-toggle="dropdown">
+         <b> Spiral Shape</b>
+          <span class="mui-caret"></span>
+        </button>
+        <ul class="mui-dropdown__menu">
+          <li onclick="changespiral('rectangular')" ><a href="#">rectangular</a></li>
+          <li onclick="changespiral('archimedean')" ><a href="#">archimedean</a></li>
+        </ul>
+      </div>
+
+      <div class="mui-dropdown">
+        <button id='themebutton' style='width:154.45px;'class="mui-btn mui-btn--primary" data-mui-toggle="dropdown">
+         <b> Theme</b>
+          <span class="mui-caret"></span>
+        </button>
+        <ul class="mui-dropdown__menu">
+          <li onclick="changetheme('clasical')" ><a href="#">classical</a></li>
+          <li onclick="changetheme('blue')" ><a href="#">blue</a></li>
+          <li onclick="changetheme('red')" ><a href="#">red</a></li>
+          <li onclick="changetheme('green')" ><a href="#">green</a></li>
+          <li onclick="changetheme('light1')" ><a href="#">light1</a></li>
+          <li onclick="changetheme('light2')" ><a href="#">light2</a></li>
+          <li onclick="changetheme('dark1')" ><a href="#">dark1</a></li>
+          <li onclick="changetheme('dark2')" ><a href="#">dark2</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div id="content" class="mui-container-fluid">
+      <div class="mui-row">
+        <div class="mui-col-sm-10 mui-col-sm-offset-1">
+          <br>
+          <br>
+          <div class="mui--text-black-54 mui--text-body2"><b>ENTER TEXT</b></div>
+          <div class="mui-divider"></div>
+          <div class="upload-wrapper">
+            <header>
+               <input type="file" onchange="showFile()">
+            </header>
+            <textarea name="paste" rows="10" cols="80" id='show-text' onchange="TextChange()"></textarea>
+             <div style='padding-left:320px;display: inline-block;'><button style='background-color: #e57373;' class="mui-btn mui-btn--accent" onclick="example()">EXAMPLE</button></div>
+            <div style='display:inline-block;'><button style='background-color: #e57373;' class="mui-btn mui-btn--accent" onclick="checkblank()">GENERATE</button></div>
+
+           
+        </div>
+          <br>
+          <br>
+          <div class="mui--text-black-54 mui--text-body2"><b>RESULT</b></div>
+          <div class="mui-divider"></div>
+          <div id='showfilter' style='display: none;'>
+            <div> Rotate Angle</div>
+            0°
+          <input class="extern-filter-slider" type="range" id="filter" value=90 max=180 onmouseup="changeangle()">
+          180°
+          </div>
+         
+          <br>
+          <div id="words"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
